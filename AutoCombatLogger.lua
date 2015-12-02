@@ -784,6 +784,7 @@ end
 function AutoCombatLogger:OnEnable()
 	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	self:RegisterEvent("PLAYER_DIFFICULTY_CHANGED")
+	self:RegisterEvent("PLAYER_LOGIN")
 
 	update = _G.CreateFrame("Frame", nil, _G.UIParent)
 	update:SetScript("OnUpdate",
@@ -812,6 +813,7 @@ function AutoCombatLogger:OnDisable()
 	-- Unregister events
 	self:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
 	self:UnregisterEvent("PLAYER_DIFFICULTY_CHANGED")
+	self:UnregisterEvent("PLAYER_LOGIN")
 end
 
 function AutoCombatLogger:PLAYER_DIFFICULTY_CHANGED()
@@ -821,6 +823,11 @@ end
 
 function AutoCombatLogger:ZONE_CHANGED_NEW_AREA()
 	self:ProcessZoneChange()
+end
+
+function AutoCombatLogger:PLAYER_LOGIN()
+	-- Just to be safe, wait a few seconds and then check the status
+	self:ScheduleTimer("ProcessZoneChange", 3)
 end
 
 local LogChecks = {
